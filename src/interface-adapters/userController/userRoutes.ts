@@ -5,7 +5,7 @@ import { Application } from "express";
 import { loginUser, registerUser,logoutUser } from "./userController";
 import { authenticateToken } from "../middlewares/authMiddleWare";
 
-const uploadDir = path.join(__dirname, '../uploads');
+const uploadDir = path.join(__dirname, '../../uploads'); 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
