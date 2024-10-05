@@ -2,7 +2,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { Application } from "express";
-import { loginUser, registerUser,logoutUser } from "./userController";
+import { loginUser, registerUser,logoutUser,updateUser } from "./userController";
 import { authenticateToken } from "../middlewares/authMiddleWare";
 
 const uploadDir = path.join(__dirname, '../../uploads'); 
@@ -27,4 +27,5 @@ export const registerRoutes = (app:Application)=>{
     app.post('/register',upload.single('image'),registerUser)
     app.post('/login',loginUser)
     app.post('/logout',authenticateToken,logoutUser)
+    app.put("/update/:id",upload.single('image'),updateUser)
 }

@@ -3,11 +3,13 @@ import { CreateUserUseCase } from "../../application/createUser";
 import { MongoUserRepository } from "../../infraStructure/database/MongoUserRepository";
 import { LoginUserUserCase } from "../../application/loginUser";
 import { generateToken } from "../../shared/utils/tokenHelper";
+import { UpdateUserUseCase } from "../../application/updateUser";
 
 //intializing the repository and use-case
 const userRepository = new MongoUserRepository();
 const createUser = new CreateUserUseCase(userRepository);
 const loginUserUserCase = new LoginUserUserCase(userRepository);
+const updateUserUserCase = new UpdateUserUseCase(userRepository);
 
 //controller function for handling the registration
 
@@ -100,4 +102,38 @@ export const logoutUser = (req: Request, res: Response) => {
   console.log("Cookie cleared");
 
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+
+
+export const updateUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.params.id;
+    const { name, email } = req.body;
+
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      : undefined;
+
+    const updateData = {
+      name,
+      email,
+      ...(imageUrl && { image: imageUrl }), // Only include image if it exists
+    };
+
+    const updatedUser = await updateUserUserCase.execute(userId, updateData);
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    const { password: _, ...userData } = updatedUser;
+    res.status(200).json(userData);
+  } catch (error: any) {
+    console.log("Error updating User", error.message);
+  }
 };
