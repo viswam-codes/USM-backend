@@ -41,14 +41,6 @@ export const registerUser = async (
     //excluding password
     const { password: _, ...userData } = user;
 
-    const token = generateToken(user._id);
-
-    res.cookie("token", token, {
-      httpOnly: true, // Ensures the cookie is only accessible by the web server
-      secure: process.env.NODE_ENV === "production", // Ensures the cookie is sent only over HTTPS (in production)
-      sameSite: "strict", // CSRF protection
-      maxAge: 6000000,
-    });
 
     //response
     res.status(201).json(userData);
@@ -74,6 +66,8 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       throw new Error("User ID is required for token generation");
     }
 
+    console.log(user?.role);
+
     const accessToken = generateToken(user._id);
 
     //putting token in the cookie
@@ -97,6 +91,7 @@ export const logoutUser = (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite:"strict"
   });
 
   console.log("Cookie cleared");

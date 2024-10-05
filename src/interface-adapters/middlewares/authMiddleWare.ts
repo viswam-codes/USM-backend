@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
     // Get the token from cookies
-   console.log("auth")
-    const token = req.cookies.token;
+   console.log("auth");
+    const token = req.cookies.token?req.cookies.token:req.cookies.adminToken;
+    console.log(token);
     // Check if the token is present
     if (!token) {
-       
         res.status(401).json({ message: "Access denied. No token provided." });
         return;
     }

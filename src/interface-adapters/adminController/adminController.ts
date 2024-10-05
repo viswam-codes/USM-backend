@@ -15,6 +15,7 @@ export const adminLogin = async(req:Request,res:Response):Promise<void> =>{
 
         const admin = await loginAdmin.execute({email,password});
 
+
         if(admin?.role==="user"){
             res.status(401).json({ message: "Not registered as admin" });
             return;
@@ -30,16 +31,16 @@ export const adminLogin = async(req:Request,res:Response):Promise<void> =>{
             throw new Error("User ID is required for token generation");
           }
 
-          const accessToken = generateToken(admin._id);
+          const adminAccessToken = generateToken(admin._id);
 
-          res.cookie("token", accessToken, {
+          res.cookie("adminToken", adminAccessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 3600000, // 1 hour in milliseconds
           });
 
-          res.status(200).json({ admin, accessToken });
+          res.status(200).json({ admin, adminAccessToken });
           console.log("Admin Logged In");
 
 
@@ -48,3 +49,19 @@ export const adminLogin = async(req:Request,res:Response):Promise<void> =>{
         res.status(500).json({ message: "An error occurred" });
     }
 }
+
+export const adminLogout = (req: Request, res: Response) => {
+    // Clear the JWT cookie
+    console.log("reaching here");
+    res.clearCookie("adminToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite:"strict"
+    });
+  
+    console.log(" admin token cleared");
+  
+    res.status(200).json({ message: "Logged out successfully" });
+  };
+
+ 
