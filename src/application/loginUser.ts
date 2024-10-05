@@ -14,6 +14,7 @@ export class LoginUserUserCase {
     async execute({email,password}:LoginUserDTO){
         try{
             const user= await this.userRepository.findByEmail(email);
+            console.log(user);
             if(!user){
                 console.log("User not found")
                 return;

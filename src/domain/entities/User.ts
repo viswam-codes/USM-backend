@@ -4,6 +4,7 @@ export interface IUserProps {
   email: string;
   password: string;
   image: string ;
+  role?:string;
 }
 
 export class User {
@@ -12,6 +13,7 @@ export class User {
   public email: string;
   public password: string;
   public image: string;
+  public role:string;
 
   constructor(props:Partial<IUserProps>) {
     this._id=props._id||"";
@@ -19,5 +21,6 @@ export class User {
     this.email = props.email!;
     this.password = props.password!;
     this.image = props.image!;
+    this.role=props.role!
   }
 }

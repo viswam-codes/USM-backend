@@ -29,3 +29,4 @@ export const registerRoutes = (app:Application)=>{
     app.post('/logout',authenticateToken,logoutUser)
     app.put("/update/:id",upload.single('image'),updateUser)
 }
+

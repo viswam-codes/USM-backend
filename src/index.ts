@@ -5,6 +5,7 @@ import { connectDB } from "./config/db";
 import { registerRoutes } from "./interface-adapters/userController/userRoutes";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { registerAdminRoute } from "./interface-adapters/adminController/adminRoutes";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 connectDB();
 
 registerRoutes(app);
+registerAdminRoute(app);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

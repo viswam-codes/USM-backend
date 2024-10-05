@@ -37,7 +37,8 @@ export class MongoUserRepository implements UserRepository {
         name: userDocument.name,
         email: userDocument.email,
         password: userDocument.password,
-        image: userDocument.image
+        image: userDocument.image,
+        role:userDocument.role,
       });
     }
 
