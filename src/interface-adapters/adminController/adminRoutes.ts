@@ -1,10 +1,10 @@
 import { Application } from "express";
-import { adminLogin } from "./adminController";
-import { adminLogout } from "./adminController";
+import { adminLogin,adminLogout,findUsers} from "./adminController";
 import { authenticateToken } from "../middlewares/authMiddleWare";
 
 
 export const registerAdminRoute = (app:Application)=>{
     app.post('/admin/login',adminLogin)
-    app.post('/admin/logout',authenticateToken,adminLogout)
+    app.get('/admin/dashboard/user',authenticateToken,findUsers)
+    app.post('/admin/logout',authenticateToken,adminLogout,findUsers)
 }

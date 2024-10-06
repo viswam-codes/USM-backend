@@ -27,6 +27,6 @@ export const registerRoutes = (app:Application)=>{
     app.post('/register',upload.single('image'),registerUser)
     app.post('/login',loginUser)
     app.post('/logout',authenticateToken,logoutUser)
-    app.put("/update/:id",upload.single('image'),updateUser)
+    app.put("/update/:id",upload.single('image'),authenticateToken,updateUser)
 }
 

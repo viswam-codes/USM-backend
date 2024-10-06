@@ -5,4 +5,4 @@ export interface UserRepository{
     save(user:User):Promise<User>;
     findByEmail(email:string):Promise<User|null>;
     update(id: string, user: User): Promise<User | null>; 
-}
+    findUsers():Promise<User[]>
