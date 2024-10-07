@@ -3,10 +3,14 @@ import { LoginAdminUseCase } from "../../application/adminUseCase/loginAdmin";
 import { MongoUserRepository } from "../../infraStructure/database/MongoUserRepository";
 import { generateToken } from "../../shared/utils/tokenHelper";
 import { UserFetchingUserCase } from "../../application/adminUseCase/userFetching";
+import { UpdateUserUseCase } from "../../application/updateUser";
+import { DeleteUser } from "../../application/adminUseCase/deleteUser";
 
 const adminRepository = new MongoUserRepository();
 const loginAdmin = new LoginAdminUseCase(adminRepository);
 const userFetching = new UserFetchingUserCase(adminRepository);
+const updateUserUseCase = new UpdateUserUseCase(adminRepository);
+const deleteUserUseCase = new DeleteUser(adminRepository);
 
 export const adminLogin = async (
   req: Request,
@@ -25,8 +29,8 @@ export const adminLogin = async (
 
     if (!admin) {
       console.log("Error");
-
       res.status(401).json({ message: "Invalid credentials" });
+      return;
     }
 
     if (!admin?._id) {
@@ -74,5 +78,53 @@ export const findUsers = async (req: Request, res: Response): Promise<void> => {
   } catch (error: any) {
     console.log("Error fetching users:", error.message);
     res.status(500).json({ message: "An error occurred while fetching users" });
+  }
+};
+
+export const editUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.params.id;
+    console.log(userId);
+    const { name, email } = req.body;
+
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      : undefined;
+
+    const updateData = {
+      name,
+      email,
+      ...(imageUrl && { image: imageUrl }), // Only include image if it exists
+    };
+
+    const updatedUser = await updateUserUseCase.execute(userId, updateData);
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    const { password: _, ...userData } = updatedUser;
+    res.status(200).json(userData);
+  } catch (error: any) {
+    console.log("Error updating User", error.message);
+  }
+};
+
+
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = req.params.id;
+    console.log(`Deleting user with ID: ${userId}`);
+
+    await deleteUserUseCase.execute(userId);
+
+    res.status(200).json({ message: `User with ID ${userId} has been deleted successfully` });
+  } catch (error: any) {
+    console.log("Error deleting user:", error.message);
+    res.status(500).json({ message: "An error occurred while deleting the user" });
   }
 };

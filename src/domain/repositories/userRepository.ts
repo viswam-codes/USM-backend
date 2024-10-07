@@ -6,3 +6,5 @@ export interface UserRepository{
     findByEmail(email:string):Promise<User|null>;
     update(id: string, user: User): Promise<User | null>; 
     findUsers():Promise<User[]>
+    deleteUser(userId: string): Promise<boolean>
+}

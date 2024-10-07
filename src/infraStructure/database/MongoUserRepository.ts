@@ -12,7 +12,6 @@ export class MongoUserRepository implements UserRepository {
     });
 
     const savedUser = await userDocument.save();
-    console.log("User Saved", savedUser);
     return new User({
       _id: savedUser._id.toString(),
       name: userDocument.name,
@@ -92,5 +91,18 @@ export class MongoUserRepository implements UserRepository {
         })
     );
     return users;
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    try {
+      const deletedUser = await UserModel.findByIdAndDelete(id);
+      if (!deletedUser) {
+        return false; 
+      }
+      return true;
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return false; // Deletion failed
+    }
   }
 }

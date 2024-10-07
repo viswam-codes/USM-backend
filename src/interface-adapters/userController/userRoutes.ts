@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import { Application } from "express";
 import { loginUser, registerUser,logoutUser,updateUser } from "./userController";
-import { authenticateToken } from "../middlewares/authMiddleWare";
+import { authenticateToken } from "../../infraStructure/middlewares/authMiddleWare";
 
 const uploadDir = path.join(__dirname, '../../uploads'); 
 if (!fs.existsSync(uploadDir)) {

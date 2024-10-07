@@ -9,7 +9,7 @@ import { UpdateUserUseCase } from "../../application/updateUser";
 const userRepository = new MongoUserRepository();
 const createUser = new CreateUserUseCase(userRepository);
 const loginUserUserCase = new LoginUserUserCase(userRepository);
-const updateUserUserCase = new UpdateUserUseCase(userRepository);
+const updateUserUseCase = new UpdateUserUseCase(userRepository);
 
 //controller function for handling the registration
 
@@ -119,7 +119,7 @@ export const updateUser = async (
       ...(imageUrl && { image: imageUrl }), // Only include image if it exists
     };
 
-    const updatedUser = await updateUserUserCase.execute(userId, updateData);
+    const updatedUser = await updateUserUseCase.execute(userId, updateData);
 
     if (!updatedUser) {
       res.status(404).json({ message: "User not found" });
