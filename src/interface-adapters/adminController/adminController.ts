@@ -37,7 +37,7 @@ export const adminLogin = async (
       throw new Error("User ID is required for token generation");
     }
 
-    const adminAccessToken = generateToken(admin._id);
+    const adminAccessToken = generateToken(admin._id,admin.role);
 
     res.cookie("adminToken", adminAccessToken, {
       httpOnly: true,

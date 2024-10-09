@@ -68,7 +68,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     console.log(user?.role);
 
-    const accessToken = generateToken(user._id);
+    const accessToken = generateToken(user._id,user.role);
 
     //putting token in the cookie
     res.cookie("token", accessToken, {
